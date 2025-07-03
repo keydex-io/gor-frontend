@@ -47,7 +47,7 @@ export default function SectionMyPositions() {
   const owner = useAppStore((s) => s.publicKey)
   const isMobile = useAppStore((s) => s.isMobile)
 
-  const defaultTab = (query.tab as string) || tabs[0].value
+  const defaultTab = (query.tab as string) || tabs[1].value
 
   const [currentTab, setCurrentTab] = useStateWithUrl(defaultTab, 'position_tab', {
     fromUrl: (v) => v,

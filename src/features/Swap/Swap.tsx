@@ -35,7 +35,7 @@ export default function Swap() {
   // const { inputMint: cacheInput, outputMint: cacheOutput } = getSwapPairCache()
   const [inputMint, setInputMint] = useState<string>(PublicKey.default.toBase58())
   const [outputMint, setOutputMint] = useState<string>(RAYMint.toBase58())
-  const [isPCChartShown, setIsPCChartShown] = useState<boolean>(true)
+  const [isPCChartShown, setIsPCChartShown] = useState<boolean>(false)
   const [isMobileChartShown, setIsMobileChartShown] = useState<boolean>(false)
   const [isChartLeft, setIsChartLeft] = useState<boolean>(true)
   const { isMobile } = useResponsive()

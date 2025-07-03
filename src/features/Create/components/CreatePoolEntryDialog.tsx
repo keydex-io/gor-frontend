@@ -35,7 +35,7 @@ type CreateTarget = 'legacy-amm' | 'standard-amm' | 'concentrated-liquidity' | '
 export function CreatePoolEntryDialog({
   isOpen,
   onClose,
-  defaultType = 'concentrated-liquidity'
+  defaultType = 'standard-amm'
 }: {
   isOpen: boolean
   onClose: () => void
@@ -171,12 +171,6 @@ export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarg
         description={
           isCreatePool ? (
             <Trans i18nKey="create_pool.modal_section_header_pool_desc">
-              <Link href="https://docs.raydium.io/raydium/pool-creation/creating-a-clmm-pool-and-farm" isExternal>
-                CLMM
-              </Link>
-              <Link href="https://docs.raydium.io/raydium/pool-creation/creating-a-standard-amm-pool" isExternal>
-                Standard
-              </Link>
             </Trans>
           ) : null
         }
@@ -189,18 +183,6 @@ export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarg
                   <Stack flexDirection={['column']} mt={2} gap={3}>
                     <PoolTypeItem
                       isSuggested
-                      isActive={type === 'concentrated-liquidity'}
-                      content={
-                        <Box>
-                          <Text whiteSpace="nowrap" fontSize="sm">
-                            {t('create_pool.modal_tab_concentrated')}
-                          </Text>
-                          <Text fontSize="xs">{t('create_pool.modal_tab_concentrated_desc')}</Text>
-                        </Box>
-                      }
-                      onClickSelf={() => onChange('concentrated-liquidity')}
-                    />
-                    <PoolTypeItem
                       isActive={type === 'standard-amm'}
                       content={
                         <Box>
@@ -212,36 +194,18 @@ export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarg
                       }
                       onClickSelf={() => onChange('standard-amm')}
                     />
-                    <PoolTypeItem
-                      isActive={type === 'legacy-amm'}
-                      content={
-                        <Box>
-                          <Text whiteSpace="nowrap" fontSize="sm">
-                            {t('create_pool.modal_tab_legacy_amm')}
-                          </Text>
-                          <Text fontSize="xs">{t('create_pool.modal_tab_legacy_amm_desc')}</Text>
-                        </Box>
-                      }
-                      onClickSelf={() => onChange('legacy-amm')}
-                    />
                   </Stack>
                 </>
               )
             : undefined
         }
-        onClick={() => onChange('concentrated-liquidity')}
+        onClick={() => onChange('standard-amm')}
       />
       <CreateBlock
         title={t('farm.create')}
         description={
           isCreateFarm ? (
             <Trans i18nKey="create_pool.modal_section_header_farm_desc">
-              <Link href="https://docs.raydium.io/raydium/pool-creation/creating-a-clmm-pool-and-farm" isExternal>
-                CLMM
-              </Link>
-              <Link href="https://docs.raydium.io/raydium/pool-creation/creating-a-standard-amm-pool/creating-an-ecosystem-farm" isExternal>
-                Standard
-              </Link>
             </Trans>
           ) : null
         }
@@ -265,15 +229,6 @@ export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarg
             ? () => (
                 <Stack flexDirection={['column', 'row']}>
                   <PoolTypeItem
-                    isActive={type === 'clmm-lock'}
-                    content={
-                      <Text whiteSpace="nowrap" fontSize="sm">
-                        {t('create_pool.modal_tab_concentrated')}
-                      </Text>
-                    }
-                    onClickSelf={() => onChange('clmm-lock')}
-                  />
-                  <PoolTypeItem
                     isActive={type === 'cpmm-lock'}
                     content={
                       <Text whiteSpace="nowrap" fontSize="sm">
@@ -286,7 +241,7 @@ export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarg
               )
             : undefined
         }
-        onClick={() => onChange('clmm-lock')}
+        onClick={() => onChange('cpmm-lock')}
       />
     </Flex>
   )

@@ -105,20 +105,7 @@ function AppNavLayout({
             <RouteLink href="/swap" isActive={pathname === '/swap'} title={t('swap.title')} />
             <RouteLink href="/liquidity-pools" isActive={pathname.includes('/liquidity')} title={t('liquidity.title')} />
             <RouteLink href="/portfolio" isActive={pathname === '/portfolio'} title={t('portfolio.title')} />
-            <RouteLink href="https://perps.raydium.io" isActive={false} title={t('perpetuals.title')} />
-            <RouteLink
-              href={`/launchpad${queryReferrer}`}
-              isActive={pathname.includes('/launchpad')}
-              title={
-                <Box as="span" bgGradient="linear-gradient(245.22deg, #FF2FC8 7.97%, #FFB12B 49.17%, #D3D839 92.1%)" bgClip="text">
-                  {t('launchpad.title')}
-                </Box>
-              }
-              slotAfter={<TagNewIcon />}
-              sx={{
-                gap: '0.25rem'
-              }}
-            />
+
             <Menu size="lg">
               <MenuButton fontSize={'lg'} px={4} py={2}>
                 <Flex
@@ -136,8 +123,8 @@ function AppNavLayout({
         </Desktop>
 
         {/* wallet button */}
+        {/* <TorqueButton />*/}
         <Flex gap={[0.5, 2]} align="center">
-          <TorqueButton />
           <PriorityButton />
           <SettingsMenu />
           {/* <EVMWallet />  don't need currently yet*/}

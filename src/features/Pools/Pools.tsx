@@ -234,8 +234,8 @@ export default function Pools() {
   })
 
   // -------- tab --------
-  const [activeTabItem, setActiveTabItem] = useStateWithUrl(tabItems[0], 'tab', {
-    fromUrl: (u) => tabItems.find((item) => item.value === u) ?? tabItems[0],
+  const [activeTabItem, setActiveTabItem] = useStateWithUrl(tabItems[1], 'tab', {
+    fromUrl: (u) => tabItems.find((item) => item.value === u) ?? tabItems[1],
     toUrl: (v) => v.value
   })
   const onPoolValueChange = useEvent((value: PoolFetchType) => {
