@@ -1,7 +1,6 @@
 {
-  "name": "raydium-ui-v3",
+  "name": "gor-frontend",
   "version": "0.0.1",
-  "author": "Solana Maintainers <maintainers@solana.foundation>",
   "repository": "https://github.com/solana-labs/wallet-adapter",
   "license": "Apache-2.0",
   "engines": {
