@@ -31,10 +31,6 @@ export default function SectionMyPositions() {
     label: string
   }[] = [
     {
-      value: 'concentrated',
-      label: t('portfolio.section_positions_tab_clmm')
-    },
-    {
       value: 'standard',
       label: t('portfolio.section_positions_tab_standard')
     },
@@ -47,7 +43,7 @@ export default function SectionMyPositions() {
   const owner = useAppStore((s) => s.publicKey)
   const isMobile = useAppStore((s) => s.isMobile)
 
-  const defaultTab = (query.tab as string) || tabs[1].value
+  const defaultTab = (query.tab as string) || tabs[0].value
 
   const [currentTab, setCurrentTab] = useStateWithUrl(defaultTab, 'position_tab', {
     fromUrl: (v) => v,
@@ -58,18 +54,10 @@ export default function SectionMyPositions() {
     setCurrentTab(tab)
   }
 
-  const isFocusClmmTab = currentTab === tabs[0].value
-  const isFocusStandardTab = currentTab === tabs[1].value
-  const isFocusStake = currentTab === tabs[2].value
+  const isFocusStandardTab = currentTab === tabs[0].value
+  const isFocusStake = currentTab === tabs[1].value
 
   const noRewardClmmPos = useRef<Set<string>>(new Set())
-  const setNoRewardClmmPos = useEvent((poolId: string, isDelete?: boolean) => {
-    if (isDelete) {
-      noRewardClmmPos.current.delete(poolId)
-      return
-    }
-    noRewardClmmPos.current.add(poolId)
-  })
 
   useEffect(
     () => () => {
@@ -228,15 +216,7 @@ export default function SectionMyPositions() {
         </GridItem>
       </Grid>
       {connected ? (
-        isFocusClmmTab ? (
-          <ClmmMyPositionTabContent
-            isLoading={isClmmLoading}
-            clmmBalanceInfo={clmmBalanceInfo}
-            lockInfo={clmmLockInfo}
-            setNoRewardClmmPos={setNoRewardClmmPos}
-            refreshTag={refreshTag}
-          />
-        ) : isFocusStandardTab ? (
+        isFocusStandardTab ? (
           <MyPositionTabStandard
             isLoading={isFarmLoading}
             allFarmBalances={allFarmBalances}
