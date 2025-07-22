@@ -4,7 +4,6 @@ import Decimal from 'decimal.js'
 import { useTranslation } from 'react-i18next'
 import BN from 'bn.js'
 import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
-import MigrateFromStandardDialog from '@/features/Clmm/MigrateClmmFromStandardDialog/Dialog'
 import { FormattedFarmInfoV6 } from '@/hooks/farm/type'
 import { FarmPositionInfo } from '@/hooks/portfolio/farm/useFarmPositions'
 import useFetchRpcPoolData from '@/hooks/pool/amm/useFetchRpcPoolData'
@@ -623,22 +622,6 @@ export default function StandardPoolRowItem({ pool, isLoading, position, stakedF
             </Box>
           ))}
       </Desktop>
-      {isMigrateOpen ? (
-        <MigrateFromStandardDialog
-          isOpen={isMigrateOpen}
-          poolInfo={pool}
-          migrateClmmConfig={migrateData!}
-          farmInfo={farmInfo}
-          lpAmount={unStakeLpBalance.toString()}
-          farmLpAmount={farmLpAmount}
-          pooledAmountA={pooledAmountA}
-          pooledAmountB={pooledAmountB}
-          currentRewardInfo={currentRewardInfo}
-          userAuxiliaryLedgers={position.hasV1Data ? [position.data.find((p) => p.version === 'V1')!.userVault] : undefined}
-          onClose={onMigrateClose}
-          onRefresh={mutate}
-        />
-      ) : null}
       {isClaimModalOpen && lockInfoRef.current ? (
         <ClaimFeesModal isOpen={isClaimModalOpen} onClose={onClaimModalClose} poolInfo={pool} lockData={lockInfoRef.current} />
       ) : null}

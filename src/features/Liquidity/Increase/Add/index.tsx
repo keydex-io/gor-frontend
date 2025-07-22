@@ -45,10 +45,7 @@ export default function AddLiquidity({
   onSelectToken: (token: TokenInfo | ApiV3Token, side: 'base' | 'quote') => void
 }) {
   const { t } = useTranslation()
-  const [addLiquidityAct, computePairAmount, addCpmmLiquidityAct] = useLiquidityStore(
-    (s) => [s.addLiquidityAct, s.computePairAmount, s.addCpmmLiquidityAct],
-    shallow
-  )
+  const [computePairAmount, addCpmmLiquidityAct] = useLiquidityStore((s) => [s.computePairAmount, s.addCpmmLiquidityAct], shallow)
   const epochInfo = useAppStore((s) => s.epochInfo)
   useRefreshEpochInfo()
 
@@ -196,14 +193,7 @@ export default function AddLiquidity({
       })
       return
     }
-    addLiquidityAct({
-      poolInfo: pool as ApiV3PoolInfoStandardItem,
-      amountA: computeAmountRef.current.base,
-      amountB: computeAmountRef.current.quote,
-      otherAmountMin: computeAmountRef.current.minAnother,
-      fixedSide: baseIn ? 'a' : 'b',
-      ...callBacks
-    })
+    throw new Error('not support not cpmm!')
   }
 
   return (

@@ -67,9 +67,6 @@ export default function CreatePool() {
             description={
               <Text fontSize="sm" color={isMobile ? colors.textSecondary : colors.textTertiary}>
                 <Trans i18nKey="create_standard_pool.please_note_des">
-                  <Link href="https://docs.raydium.io/raydium/pool-creation/creating-a-clmm-pool-and-farm" isExternal>
-                    CLMM
-                  </Link>
                   <Link href="https://docs.raydium.io/raydium/pool-creation/creating-a-standard-amm-pool" isExternal>
                     Standard
                   </Link>

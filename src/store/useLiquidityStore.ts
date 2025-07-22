@@ -40,15 +40,6 @@ interface LiquidityStore {
   slippage: number
   cpmmFeeConfigs: Record<string, ApiCpmmConfigInfo>
 
-  addLiquidityAct: (
-    params: {
-      poolInfo: ApiV3PoolInfoStandardItem
-      amountA: string
-      amountB: string
-      otherAmountMin: string
-      fixedSide: 'a' | 'b'
-    } & TxCallbackProps
-  ) => Promise<string>
   addCpmmLiquidityAct: (
     params: {
       poolInfo: ApiV3PoolInfoStandardItemCpmm
@@ -58,17 +49,7 @@ interface LiquidityStore {
       baseIn: boolean
     } & TxCallbackProps
   ) => Promise<string>
-  removeLiquidityAct: (
-    params: {
-      poolInfo: ApiV3PoolInfoStandardItem
-      lpAmount: string
-      amountA: string
-      amountB: string
-      config?: {
-        bypassAssociatedCheck?: boolean
-      }
-    } & TxCallbackProps
-  ) => Promise<string>
+
   removeCpmmLiquidityAct: (
     params: {
       poolInfo: ApiV3PoolInfoStandardItemCpmm
@@ -80,6 +61,7 @@ interface LiquidityStore {
       }
     } & TxCallbackProps
   ) => Promise<string>
+
   createPoolAct: (
     params: {
       pool: {
@@ -90,24 +72,6 @@ interface LiquidityStore {
       baseAmount: string
       quoteAmount: string
       startTime?: Date
-    } & TxCallbackProps
-  ) => Promise<string>
-
-  migrateToClmmAct: (
-    params: {
-      poolInfo: ApiV3PoolInfoStandardItem
-      clmmPoolInfo: ApiV3PoolInfoConcentratedItem
-      removeLpAmount: BN
-      userAuxiliaryLedgers?: PublicKey[]
-      createPositionInfo: {
-        tickLower: number
-        tickUpper: number
-        baseAmount: BN
-        otherAmountMax: BN
-      }
-      farmInfo?: FormatFarmInfoOutV6
-      userFarmLpAmount?: BN
-      base: 'MintA' | 'MintB'
     } & TxCallbackProps
   ) => Promise<string>
 
@@ -225,101 +189,6 @@ export const useLiquidityStore = createStore<LiquidityStore>(
         .finally(onFinally)
     },
 
-    addLiquidityAct: async ({ onSent, onError, onFinally, ...params }) => {
-      const { raydium, txVersion } = useAppStore.getState()
-      if (!raydium) return ''
-      const otherMint = params.fixedSide === 'a' ? 'mintB' : 'mintA'
-      const { execute } = await raydium.liquidity.addLiquidity({
-        ...params,
-        amountInA: new TokenAmount(
-          toToken(params.poolInfo.mintA),
-          new Decimal(params.amountA).mul(10 ** params.poolInfo.mintA.decimals).toFixed(0)
-        ),
-        amountInB: new TokenAmount(
-          toToken(params.poolInfo.mintB),
-          new Decimal(params.amountB).mul(10 ** params.poolInfo.mintB.decimals).toFixed(0)
-        ),
-        otherAmountMin: new TokenAmount(
-          toToken(params.poolInfo[otherMint]),
-          new Decimal(params.otherAmountMin).mul(10 ** params.poolInfo[otherMint].decimals).toFixed(0)
-        ),
-        txVersion,
-        computeBudgetConfig: await getComputeBudgetConfig()
-      })
-
-      const meta = getTxMeta({
-        action: 'addLiquidity',
-        values: {
-          amountA: formatLocaleStr(params.amountA, params.poolInfo.mintA.decimals)!,
-          symbolA: getMintSymbol({ mint: params.poolInfo.mintA, transformSol: true }),
-          amountB: formatLocaleStr(params.amountB, params.poolInfo.mintB.decimals)!,
-          symbolB: getMintSymbol({ mint: params.poolInfo.mintB, transformSol: true })
-        }
-      })
-
-      return execute()
-        .then(({ txId, signedTx }) => {
-          txStatusSubject.next({
-            txId,
-            ...meta,
-            signedTx,
-            mintInfo: [params.poolInfo.mintA, params.poolInfo.mintB],
-            onError,
-            onConfirmed: params.onConfirmed
-          })
-          onSent?.()
-          return txId
-        })
-        .catch((e) => {
-          onError?.()
-          toastSubject.next({ ...meta, txError: e })
-          return ''
-        })
-        .finally(onFinally)
-    },
-
-    removeLiquidityAct: async ({ onSent, onError, onFinally, ...params }) => {
-      const { raydium, txVersion } = useAppStore.getState()
-      const lpSlippage = get().slippage
-
-      if (!raydium) return ''
-      const computeBudgetConfig = await getComputeBudgetConfig()
-      const { poolInfo, lpAmount, amountA, amountB, config } = params
-
-      const { execute } = await raydium.liquidity.removeLiquidity({
-        poolInfo,
-        lpAmount: new BN(lpAmount),
-        baseAmountMin: new BN(new Decimal(amountA).mul(1 - lpSlippage).toFixed(0)),
-        quoteAmountMin: new BN(new Decimal(amountB).mul(1 - lpSlippage).toFixed(0)),
-        config,
-        txVersion,
-        computeBudgetConfig
-      })
-
-      const meta = getTxMeta({
-        action: 'removeLiquidity',
-        values: {
-          amountA: formatLocaleStr(new Decimal(amountA).div(10 ** poolInfo.mintA.decimals).toString(), params.poolInfo.mintA.decimals)!,
-          symbolA: getMintSymbol({ mint: params.poolInfo.mintA, transformSol: true }),
-          amountB: formatLocaleStr(new Decimal(amountB).div(10 ** poolInfo.mintB.decimals).toString(), params.poolInfo.mintB.decimals)!,
-          symbolB: getMintSymbol({ mint: params.poolInfo.mintB, transformSol: true })
-        }
-      })
-
-      return execute()
-        .then(({ txId, signedTx }) => {
-          txStatusSubject.next({ txId, ...meta, signedTx, mintInfo: [params.poolInfo.mintA, params.poolInfo.mintB], onError })
-          onSent?.()
-          return txId
-        })
-        .catch((e) => {
-          onError?.()
-          toastSubject.next({ ...meta, txError: e })
-          return ''
-        })
-        .finally(onFinally)
-    },
-
     removeCpmmLiquidityAct: async ({ onSent, onError, onFinally, ...params }) => {
       const { raydium, txVersion } = useAppStore.getState()
 
@@ -412,74 +281,6 @@ export const useLiquidityStore = createStore<LiquidityStore>(
           return ''
         })
         .finally(onFinally)
-    },
-
-    migrateToClmmAct: async ({ onSent, onError, onFinally, onConfirmed, ...params }) => {
-      const { raydium, txVersion, wallet, connection } = useAppStore.getState()
-      if (!raydium || !connection) return ''
-
-      const computeBudgetConfig = await getComputeBudgetConfig()
-      const { execute, transactions } = await raydium.liquidity.removeAllLpAndCreateClmmPosition({
-        ...params,
-        createPositionInfo: {
-          ...params.createPositionInfo,
-          tickLower: Math.min(params.createPositionInfo.tickLower, params.createPositionInfo.tickUpper),
-          tickUpper: Math.max(params.createPositionInfo.tickLower, params.createPositionInfo.tickUpper)
-        },
-        computeBudgetConfig,
-        getEphemeralSigners: wallet ? await getEphemeralSigners(wallet) : undefined,
-        txVersion
-      })
-
-      const removeMeta = getTxMeta({
-        action: 'removeLpBeforeMigrate'
-      })
-
-      const migrateMeta = getTxMeta({
-        action: 'migrateToClmm',
-        values: { mint: getPoolName(params.poolInfo) }
-      })
-
-      const txLength = transactions.length
-      const { toastId, processedId, handler } = getDefaultToastData({
-        txLength,
-        onSent,
-        onError,
-        onFinally,
-        onConfirmed
-      })
-      const getSubTxTitle = (idx: number) => (idx === transactions.length - 1 ? migrateMeta.title : removeMeta.title)
-
-      return execute({
-        sequentially: true,
-        onTxUpdate: (data) => {
-          handleMultiTxRetry(data)
-          handleMultiTxToast({
-            toastId,
-            processedId: transformProcessData({ processedId, data }),
-            txLength,
-            meta: migrateMeta,
-            handler,
-            getSubTxTitle
-          })
-        }
-      })
-        .then(({ txIds }) => {
-          handleMultiTxToast({
-            toastId,
-            processedId: transformProcessData({ processedId, data: [] }),
-            txLength,
-            meta: migrateMeta,
-            handler,
-            getSubTxTitle
-          })
-          return txIds[0]
-        })
-        .catch((e) => {
-          onError?.()
-          toastSubject.next({ txError: e, ...migrateMeta })
-          return ''
-        })
     },
 
     lockCpmmLpAct: async ({ poolInfo, lpAmount, ...txCallback }) => {

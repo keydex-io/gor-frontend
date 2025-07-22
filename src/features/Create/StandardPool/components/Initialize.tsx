@@ -36,7 +36,6 @@ import useFetchPoolByMint from '@/hooks/pool/useFetchPoolByMint'
 import CreateSuccessModal from './CreateSuccessModal'
 import useInitPoolSchema from '../hooks/useInitPoolSchema'
 import useBirdeyeTokenPrice from '@/hooks/token/useBirdeyeTokenPrice'
-import { useCreateMarketStore } from '@/store'
 
 import Decimal from 'decimal.js'
 import dayjs from 'dayjs'
@@ -49,7 +48,6 @@ export default function Initialize({ isAmmV4 }: { isAmmV4: boolean }) {
   const [baseToken, quoteToken] = [tokenMap.get(inputMint), tokenMap.get(outputMint)]
 
   const [createPoolAct, newCreatedPool] = useLiquidityStore((s) => [s.createPoolAct, s.newCreatedPool], shallow)
-  const createMarketAndPoolAct = useCreateMarketStore((s) => s.createMarketAndPoolAct)
 
   const [baseIn, setBaeIn] = useState(true)
   const [startDate, setStartDate] = useState<Date | undefined>()
@@ -155,21 +153,6 @@ export default function Initialize({ isAmmV4 }: { isAmmV4: boolean }) {
 
   const onInitializeClick = () => {
     onLoading()
-    if (isAmmV4) {
-      let poolId = ''
-      createMarketAndPoolAct({
-        baseToken: solToWSolToken(baseToken!),
-        quoteToken: solToWSolToken(quoteToken!),
-        baseAmount: new Decimal(tokenAmount.base).mul(10 ** baseToken!.decimals).toFixed(0),
-        quoteAmount: new Decimal(tokenAmount.quote).mul(10 ** quoteToken!.decimals).toFixed(0),
-        startTime: startDate,
-        onSent: (data) => (poolId = data.ammId.toBase58()),
-        onConfirmed: () => setNewPoolId(poolId),
-        onError: onTxError,
-        onFinally: offLoading
-      })
-      return
-    }
     createPoolAct({
       pool: {
         mintA: solToWSolToken(baseToken!),

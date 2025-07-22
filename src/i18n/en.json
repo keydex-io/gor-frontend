@@ -739,7 +739,7 @@
     "step_2": "Step 2",
     "step_2_name": "Initialize Liquidity Pool",
     "please_note": "Please Note",
-    "please_note_des": "This tool is for advanced users. For detailed instructions, read the guide for <0>CLMM</0> or <1>Standard</1> pools.",
+    "please_note_des": "This tool is for advanced users. For detailed instructions, read the guide for <0>Standard</0> pools.",
     "enter_open_book_market_id": "Enter OpenBook Market ID",
     "market_id": "Market ID",
     "note_has_id": "OpenBook integrated pools must be linked to a unique OpenBook Market ID. A Market ID can only be used for one pool.",

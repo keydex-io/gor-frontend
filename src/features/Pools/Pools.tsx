@@ -130,20 +130,22 @@ export default function Pools() {
 
   const tabItems: PoolTabItem[] = [
     {
+      name: 'Standard',
+      label: isEN && isMobile ? 'STANDARD' : t('liquidity.standard'),
+      value: PoolFetchType.Standard
+    }
+    /*
+    {
       name: 'Concentrated',
       label: isEN && isMobile ? 'CLMM' : t('liquidity.concentrated'),
       value: PoolFetchType.Concentrated
     },
-    {
-      name: 'Standard',
-      label: isEN && isMobile ? 'STANDARD' : t('liquidity.standard'),
-      value: PoolFetchType.Standard
-    },
+
     {
       name: 'All',
       label: isEN && isMobile ? 'ALL' : t('common.all'),
       value: PoolFetchType.All
-    }
+    }*/
   ]
 
   const listControllerIconSize = useBreakpointValue({ base: '24px', sm: '28px' })
@@ -234,8 +236,8 @@ export default function Pools() {
   })
 
   // -------- tab --------
-  const [activeTabItem, setActiveTabItem] = useStateWithUrl(tabItems[1], 'tab', {
-    fromUrl: (u) => tabItems.find((item) => item.value === u) ?? tabItems[1],
+  const [activeTabItem, setActiveTabItem] = useStateWithUrl(tabItems[0], 'tab', {
+    fromUrl: (u) => tabItems.find((item) => item.value === u) ?? tabItems[0],
     toUrl: (v) => v.value
   })
   const onPoolValueChange = useEvent((value: PoolFetchType) => {

@@ -41,7 +41,6 @@ export default function UnStakeLiquidity({
   const isMobile = useAppStore((s) => s.isMobile)
   const featureDisabled = useAppStore((s) => s.featureDisabled.removeStandardPosition)
   const epochInfo = useRefreshEpochInfo()
-  const removeLiquidityAct = useLiquidityStore((s) => s.removeLiquidityAct)
   const removeCpmmLiquidityAct = useLiquidityStore((s) => s.removeCpmmLiquidityAct)
   const { data: tokenPrice } = useTokenPrice({ mintList: [poolInfo?.mintA.address, poolInfo?.mintB.address] })
   const [removePercent, setRemovePercent] = useState(0)
@@ -111,13 +110,7 @@ export default function UnStakeLiquidity({
       })
       return
     }
-    removeLiquidityAct({
-      poolInfo: poolInfo as FormattedPoolInfoStandardItem,
-      lpAmount: removeAmount.mul(10 ** poolInfo.lpMint.decimals).toFixed(0),
-      amountA: withdrawAmountA.toString(),
-      amountB: withdrawAmountB.toString(),
-      ...callBacks
-    })
+    throw new Error('not support no-cpmm!')
   }
 
   const handleEnd = useEvent(() => {
