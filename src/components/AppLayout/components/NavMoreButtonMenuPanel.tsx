@@ -35,14 +35,6 @@ export function NavMoreButtonMenuPanel() {
             </HStack>
           </Link>
         </MenuItem>
-        <MenuItem>
-          <Link as={NextLink} _hover={{ textDecoration: 'none' }} w="full" href="/bridge">
-            <HStack>
-              <BridgePageThumbnailIcon />
-              <Text>{t('bridge.title')}</Text>
-            </HStack>
-          </Link>
-        </MenuItem>
         <MenuDivider />
         <MenuItem>
           <Link as={NextLink} href="/docs/disclaimer" _hover={{ textDecoration: 'none' }} w="full" isExternal>

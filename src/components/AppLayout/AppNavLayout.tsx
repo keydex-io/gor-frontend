@@ -92,8 +92,6 @@ function AppNavLayout({
                 ? t('common.playground')
                 : pathname === '/staking'
                 ? t('staking.title')
-                : pathname === '/bridge'
-                ? t('bridge.title')
                 : ''}
             </Text>
           </HStack>
