@@ -135,14 +135,7 @@ export default function Swap() {
       >
         <GridItem gridArea="controls">
           <HStack justifyContent="space-between" my={[1, 0]}>
-            <MoonpayBuy>
-              <HStack gap={1}>
-                <CreditCardIcon />
-                <Text color={colors.textLink} fontWeight="medium">
-                  Buy
-                </Text>
-              </HStack>
-            </MoonpayBuy>
+            <div></div>
             <HStack>
               <SlippageAdjuster />
               <Tooltip

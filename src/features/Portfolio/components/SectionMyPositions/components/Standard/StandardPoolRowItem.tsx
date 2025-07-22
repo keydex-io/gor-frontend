@@ -106,7 +106,7 @@ export default function StandardPoolRowItem({ pool, isLoading, position, stakedF
   const unStakeLpBalance = getTokenBalanceUiAmount({ mint: pool?.lpMint.address || '', decimals: pool?.lpMint.decimals }).rawAmount
   const allLpUiAmount = new Decimal(position.totalLpAmount || 0).add(unStakeLpBalance).div(10 ** (pool?.lpMint.decimals ?? 0))
 
-  const canMigrate = !!migrateData && allLpUiAmount.gt(0)
+  const canMigrate = false
 
   const isEmptyLp = allLpUiAmount.isZero() && farmLpAmount === '0'
 
