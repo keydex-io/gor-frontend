@@ -304,6 +304,7 @@ export const useAppStore = createStore<AppState>(
       if (rpcLoading) return
       rpcLoading = true
       try {
+        // TODO: remove this after testing
         if (process.env.NEXT_PUBLIC_RPC) {
           const success = await setRpcUrlAct(process.env.NEXT_PUBLIC_RPC, true, true)
           if (success) return
