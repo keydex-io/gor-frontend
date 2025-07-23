@@ -68,12 +68,21 @@ const App: FC<PropsWithChildren<any>> = ({ children }) => {
 
   const _walletConnect = useMemo(() => {
     const connectWallet: WalletConnectWalletAdapter[] = []
+    const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PJ_ID
+    
+    console.log('WalletConnect Project ID:', projectId)
+    
+    if (!projectId) {
+      console.warn('WalletConnect disabled: Invalid or missing project ID. Please set NEXT_PUBLIC_WALLET_CONNECT_PJ_ID in .env file.')
+      return connectWallet
+    }
+    
     try {
       connectWallet.push(
         new WalletConnectWalletAdapter({
           network: network as WalletAdapterNetwork.Mainnet,
           options: {
-            projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PJ_ID,
+            projectId: projectId,
             metadata: {
               name: 'Raydium',
               description: 'Raydium',
@@ -84,7 +93,7 @@ const App: FC<PropsWithChildren<any>> = ({ children }) => {
         })
       )
     } catch (e) {
-      // console.error('WalletConnect error', e)
+      console.error('WalletConnect error', e)
     }
     return connectWallet
   }, [network])
