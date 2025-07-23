@@ -14,7 +14,8 @@ export function RPCConnectionSettingField() {
   const { t } = useTranslation()
   const [isMobile, rpcs, rpcNodeUrl, setRpcUrlAct] = useAppStore((s) => [s.isMobile, s.rpcs, s.rpcNodeUrl, s.setRpcUrlAct], shallow)
   const isCurrentCustom = !rpcs.some((rpc) => rpc.url === rpcNodeUrl) && !!rpcNodeUrl
-  const [customUrl, setCustomUrl] = useState(isCurrentCustom ? rpcNodeUrl || 'https://' : 'https://')
+  const defaultRpcUrl = process.env.NEXT_PUBLIC_RPC || 'https://api.mainnet-beta.solana.com';
+  const [customUrl, setCustomUrl] = useState(isCurrentCustom ? rpcNodeUrl || defaultRpcUrl : defaultRpcUrl);
   const { isOpen: isCustom, onOpen: onCustom, onClose: offCustom } = useDisclosure()
   const { isOpen: isLoading, onOpen: onLoading, onClose: offLoading } = useDisclosure()
   const defaultRpc = rpcs.find((rpc) => rpc.url === rpcNodeUrl)

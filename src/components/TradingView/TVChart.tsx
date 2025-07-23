@@ -167,7 +167,7 @@ export default function TVChart({
     const options: TradingTerminalWidgetOptions = {
       // debug: true,
       container: id,
-      library_path: '/charting_library/charting_library/',
+      library_path: '/charting_library/',
       custom_css_url: '/tradingview.css',
       autosize: true,
       disabled_features: [
@@ -206,7 +206,7 @@ export default function TVChart({
       datafeed: new ChartDataFeed({ connection, mintInfo, mintBInfo, curveType }),
       interval: (resolutionSupported ? savedResolution : birdeye ? '15' : '5') as ResolutionString,
       locale: locale as LanguageCode,
-      numeric_formatting: { decimal_sign: '.', grouping_separator: '.' },
+      numeric_formatting: { decimal_sign: '.' },
       saved_data: !isEmpty(savedTvChartConfig) ? savedTvChartConfig : undefined,
       custom_formatters: {
         priceFormatterFactory: (symbolInfo, minTick) => {
@@ -251,7 +251,7 @@ export default function TVChart({
         mCapButton.innerHTML = "<span style='color:#2937e8'>Price</span>/<span>Mcap</span>"
 
         mCapButton.addEventListener('click', function () {
-          const isMarketCap = tvChartWidget.activeChart().symbolExt()?.name.includes('marketcap')
+          const isMarketCap = tvChartWidget.activeChart().symbolExt()?.symbol.includes('marketcap')
           tvChartWidget.setSymbol(`${poolId}${isMarketCap ? '' : '_marketcap'}`, tvChartWidget.activeChart().resolution(), () => {
             // mCapButton!.innerHTML = `<span ${isMarketCap ? "style='color:#2937e8'" : ''}>Price</span> / <span ${
             //   !isMarketCap ? "style='color:#2937e8'" : ''
@@ -264,7 +264,7 @@ export default function TVChart({
           .activeChart()
           .onSymbolChanged()
           .subscribe(null, () => {
-            const isMarketCap = tvChartWidget.activeChart().symbolExt()?.name.includes('marketcap')
+            const isMarketCap = tvChartWidget.activeChart().symbolExt()?.symbol.includes('marketcap')
             mCapButton!.innerHTML = `<span ${isMarketCap ? '' : "style='color:#2937e8'"}>Price</span> / <span ${
               !isMarketCap ? '' : "style='color:#2937e8'"
             }>Mcap</span>`
