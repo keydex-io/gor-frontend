@@ -305,10 +305,10 @@ export const useAppStore = createStore<AppState>(
       rpcLoading = true
       try {
         // TODO: remove this after testing
-        if (process.env.NEXT_PUBLIC_RPC) {
-          const success = await setRpcUrlAct(process.env.NEXT_PUBLIC_RPC, true, true)
-          if (success) return
-        }
+        // if (process.env.NEXT_PUBLIC_RPC) {
+        //   const success = await setRpcUrlAct(process.env.NEXT_PUBLIC_RPC, true, true)
+        //   if (success) return
+        // }
         const {
           data: { rpcs }
         } = await axios.get<{ rpcs: RpcItem[] }>(urlConfigs.BASE_HOST + urlConfigs.RPCS)
