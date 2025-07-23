@@ -25,7 +25,7 @@ import { retry, isProdEnv } from '@/utils/common'
 import { compare } from 'compare-versions'
 
 export const defaultNetWork = WalletAdapterNetwork.Mainnet // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
-export const defaultEndpoint = clusterApiUrl(defaultNetWork) // You can also provide a custom RPC endpoint
+export const defaultEndpoint = process.env.NEXT_PUBLIC_RPC || clusterApiUrl(defaultNetWork) // You can also provide a custom RPC endpoint
 export const APR_MODE_KEY = '_r_apr_'
 export const EXPLORER_KEY = '_r_explorer_'
 export const supportedExplorers = [
@@ -304,6 +304,10 @@ export const useAppStore = createStore<AppState>(
       if (rpcLoading) return
       rpcLoading = true
       try {
+        if (process.env.NEXT_PUBLIC_RPC) {
+          const success = await setRpcUrlAct(process.env.NEXT_PUBLIC_RPC, true, true)
+          if (success) return
+        }
         const {
           data: { rpcs }
         } = await axios.get<{ rpcs: RpcItem[] }>(urlConfigs.BASE_HOST + urlConfigs.RPCS)
